@@ -1,41 +1,13 @@
-let users = [
-    {
-        id: 1,
-        name: "Admin User",
-        email: "admin@gmail.com",
-        password: "hashed password",
-        role: "admin"
-    }
+const prisma = require("../prismaClient/prismaClient");
 
-];
+exports.getAllUsers = () => prisma.user.findMany();
 
-let accounts = require('./accountRepository')._accounts;
+exports.getUserById = (id) => prisma.user.findUnique({where: {id}});
 
-exports.getAllUsers = () => users;
+exports.findByEmail = (email) => prisma.user.findUnique({where: {email}});
 
-exports.getUserById = (id) => users.find(u => u.id === id);
+exports.createUser = (data) => prisma.user.create({data});
 
-exports.findByEmail = (email) => users.find(u => u.email === email);
+exports.updateUser = (id, data) => prisma.user.update({where: {id}, data});
 
-exports.createUser = (data) => {
-    const newUser = { id: Date.now(), ...data };
-    users.push(newUser);
-    return newUser;
-};
-
-exports.updateUser = (id, data) => {
-    const index = users.findIndex(u => u.id === id);
-    if (index === -1) return null;
-    users[index] = { ...users[index], ...data };
-    return users[index];
-};
-
-exports.deleteUser = (id) => {
-    const index = users.findIndex(u => u.id === id);
-    if (index === -1) return null;
-    const removedUser = users.splice(index, 1)[0];
-
-    const accountRepo = require('./accountRepository');
-    accountRepo.deleteAccountsByUserId(id);
-    return removedUser;
-};
+exports.deleteUser = (id) => prisma.user.delete({where: {id}});

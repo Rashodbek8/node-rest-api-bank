@@ -5,6 +5,7 @@ const app = express();
 const userRoutes = require('../routes/userRoutes');
 const accountRoutes = require('../routes/accountRoutes');
 const authRoutes = require("../routes/authRoutes");
+const transactionRoutes = require("../routes/transactionRoutes");
 
 const logger = require('../middlewares/logger');
 const errorHandler = require('../middlewares/errorHandler');
@@ -17,6 +18,8 @@ app.use('/auth', authRoutes);
 
 app.use('/users', userRoutes);
 app.use('/accounts', accountRoutes);
+
+app.use('/transactions', transactionRoutes);
 
 app.get('/', (req, res) => res.send("API is running"));
 
