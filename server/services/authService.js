@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt")
 const jwt = require("../config/jwt");
 const userRepository = require("../repositories/userRepository");
+const accountRepository = require("../repositories/accountRepository")
 
 exports.register = async(data) => {
     if(!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
@@ -20,6 +21,14 @@ exports.register = async(data) => {
         password: hashedPassword,
         role: data.role || "client"
     });
+
+    const accountData = {
+        userId: user.id,
+        accountNumber: "UZ" + Math.floor(Math.random() * 10000000000),
+        balance: 0,
+    };
+    await accountRepository.createAccount(accountData);
+    
     return user;
 };
 

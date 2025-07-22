@@ -17,9 +17,25 @@ model User {
 }
 
 model Account {
-  id         Int    @id @default(autoincrement())
-  userId     Int
-  accountNum String @unique
-  balance    Float
-  user       User   @relation(fields: [userId], references: [id])
+id Int @id @default(autoincrement())
+userId Int
+accountNumber String @unique
+balance Float
+user User @relation(fields: [userId], references: [id])
+
+outgoingTransactions Transaction[] @relation("FromAccount")
+incomingTransactions Transaction[] @relation("ToAccount")
+}
+
+model Transaction {
+id Int @id @default(autoincrement())
+fromAccountId Int
+toAccountId Int
+amount Float
+status String // 'pending' | 'confirmed' | 'failed'
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+
+fromAccount Account @relation("FromAccount", fields: [fromAccountId], references: [id])
+toAccount Account @relation("ToAccount", fields: [toAccountId], references: [id])
 }

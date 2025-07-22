@@ -6,6 +6,7 @@ const userRoutes = require('../routes/userRoutes');
 const accountRoutes = require('../routes/accountRoutes');
 const authRoutes = require("../routes/authRoutes");
 const transactionRoutes = require("../routes/transactionRoutes");
+const webhookRoute = require("../routes/webhookRoute");
 
 const logger = require('../middlewares/logger');
 const errorHandler = require('../middlewares/errorHandler');
@@ -20,6 +21,8 @@ app.use('/users', userRoutes);
 app.use('/accounts', accountRoutes);
 
 app.use('/transactions', transactionRoutes);
+
+app.use('/webhook', webhookRoute);
 
 app.get('/', (req, res) => res.send("API is running"));
 

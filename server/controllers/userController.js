@@ -30,8 +30,13 @@ exports.createUser = async (req, res, next) => {
 
 exports.updateUser = async (req, res, next) => {
     try {
-        const updated = await userService.updateUser(parseInt(req.params.id), req.body);
+        const id = parseInt(req.params.id);
+        const data = { ...req.body };
+        delete data.id;
+
+        const updated = await userService.updateUser(id, data);
         if (!updated) throw { status: 404, message: "User not found" };
+
         res.json({ message: "User updated", user: updated });
     } catch (err) {
         next(err);

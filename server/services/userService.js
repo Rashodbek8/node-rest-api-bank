@@ -19,7 +19,10 @@ exports.createUser = async (data) => {
     return newUser;
 };
 
-exports.updateUser = async (id, data) => userRepository.updateUser(id, data);
+exports.updateUser = async (id, data) => {
+    delete data.id; 
+    return userRepository.updateUser(id, data);
+};
 
 exports.deleteUser = async (id) => {
     await accountRepository.deleteAccountByUserId(id);
