@@ -1,16 +1,15 @@
 const crypto = require("crypto");
 
-const payload = JSON.stringify({
+const body = {
   transactionId: 123,
   status: "confirmed",
   timestamp: "2025-07-21T10:30:00Z"
-});
+};
 
-const secret = "superSecretKey228";
-
+const payload = JSON.stringify(body);
 const signature = crypto
-  .createHmac("sha256", secret)
+  .createHmac("sha256", "SuperSecretKey228")
   .update(payload)
   .digest("hex");
 
-console.log("Подпись:", signature);
+console.log("X-Sender-Signature:", signature);
