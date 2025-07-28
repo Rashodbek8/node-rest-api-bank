@@ -9,4 +9,4 @@ const redisConfig = {
 
 const createQueue = (name) => new Queue(name, redisConfig);
 
-module.exports = createQueue;
+module.exports = createQueue;   

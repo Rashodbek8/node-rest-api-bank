@@ -1,19 +1,31 @@
 generator client {
-  provider = "prisma-client-js"
+provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+provider = "postgresql"
+url = env("DATABASE_URL")
+}
+
+enum TransactionStatus {
+pending
+confirmed
+failed
+}
+
+enum WebhookStatus {
+delivered
+retrying
+failed
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
-  name     String
-  email    String    @unique
-  password String
-  role     String    @default("client")
-  accounts Account[]
+id Int @id @default(autoincrement())
+name String
+email String @unique
+password String
+role String @default("client")
+accounts Account[]
 }
 
 model Account {
@@ -32,10 +44,22 @@ id Int @id @default(autoincrement())
 fromAccountId Int
 toAccountId Int
 amount Float
-status String // 'pending' | 'confirmed' | 'failed'
+status TransactionStatus
 createdAt DateTime @default(now())
 updatedAt DateTime @updatedAt
 
 fromAccount Account @relation("FromAccount", fields: [fromAccountId], references: [id])
 toAccount Account @relation("ToAccount", fields: [toAccountId], references: [id])
+webhookLogs WebhookLog[]
+}
+
+model WebhookLog {
+id Int @id @default(autoincrement())
+transactionId Int
+status WebhookStatus
+payload Json
+errorMessage String?
+createdAt DateTime @default(now())
+
+transaction Transaction @relation(fields: [transactionId], references: [id])
 }
