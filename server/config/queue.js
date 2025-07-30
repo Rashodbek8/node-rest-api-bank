@@ -1,12 +1,9 @@
-const Queue = require("bull");
+const Queue = require('bull');
 
 const redisConfig = {
-    redis: {
-        host: "127.0.0.1",
-        port: 6379,
-    },
+  host: "127.0.0.1",
+  port: 6379,
 };
 
-const createQueue = (name) => new Queue(name, redisConfig);
-
-module.exports = createQueue;   
+exports.redisConfig = redisConfig;
+exports.createQueue = (name) => new Queue(name, { redis: redisConfig });

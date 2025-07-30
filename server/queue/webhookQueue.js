@@ -1,10 +1,17 @@
 const Queue = require("bull");
+const { redisConfig } = require("../config/queue");
 
 const webhookQueue = new Queue("webhookQueue", {
-    redis:{
-        host: "127.0.0.1",
-        port: 6379,
+  redis: redisConfig,
+  defaultJobOptions: {
+    attempts: 3,
+    backoff: { 
+      type: "exponential",
+      delay: 1000 
     },
+    removeOnComplete: true
+  }
 });
 
-module.exports = webhookQueue
+console.log("🔄 Webhook queue initialized");
+module.exports = webhookQueue;
